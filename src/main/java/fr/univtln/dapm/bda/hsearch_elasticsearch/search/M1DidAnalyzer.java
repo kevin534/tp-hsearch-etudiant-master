@@ -9,7 +9,7 @@ import org.apache.lucene.analysis.standard.StandardTokenizerFactory;
 import org.hibernate.search.backend.lucene.analysis.LuceneAnalysisConfigurationContext;
 import org.hibernate.search.backend.lucene.analysis.LuceneAnalysisConfigurer;
 
-public class M1DidAnalyzer implements LuceneAnalysisConfigurer {
+public class M1DidAnalyzer implements LuceneAnalysisConfigurer {//ElasticsearchAnalysisConfigurer
 
 	@Override
 	public void configure(LuceneAnalysisConfigurationContext context) {
@@ -21,3 +21,4 @@ public class M1DidAnalyzer implements LuceneAnalysisConfigurer {
 	}
 
 }
+

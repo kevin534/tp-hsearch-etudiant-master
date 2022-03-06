@@ -1,17 +1,13 @@
 package fr.univtln.dapm.bda.hsearch_elasticsearch.domain;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
-
 import javax.persistence.*;
 
 import org.hibernate.search.engine.backend.types.Projectable;
 import org.hibernate.search.engine.backend.types.TermVector;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.Indexed;
-import org.hibernate.search.mapper.pojo.mapping.definition.annotation.IndexedEmbedded;
 
 /**
  * Entité indexable représentant un author.
@@ -19,6 +15,7 @@ import org.hibernate.search.mapper.pojo.mapping.definition.annotation.IndexedEmb
  * @author vincent
  *
  */
+
 @Entity
 @Indexed
 public class Author implements Serializable {
@@ -33,12 +30,9 @@ public class Author implements Serializable {
     private String lastName;
     @FullTextField(analyzer = "m1_did_analyzer", projectable = Projectable.YES, termVector = TermVector.WITH_POSITIONS_OFFSETS)
     private String Biography;
-    @OneToMany
-    private List<Book> listBook;
 
-    /*@OneToMany(mappedBy = "authors")
-    private List<Book> listBook;*/
-    @Lob
+    @OneToMany(mappedBy = "author")
+    private List<Book> listBook;
 
     public List<Book> getListBook() {
         return listBook;
@@ -50,7 +44,6 @@ public class Author implements Serializable {
     public String getFirstName() {
         return firstName;
     }
-
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
@@ -73,7 +66,7 @@ public class Author implements Serializable {
 
     @Override
     public String toString() {
-        return "Author [firstName=" + firstName + ", lastName=" + lastName + ", biography="
+        return "Author [firstName=" + firstName + ", lastName=" + lastName + ", Biography="
                 + getBiography()+"]";
     }
 

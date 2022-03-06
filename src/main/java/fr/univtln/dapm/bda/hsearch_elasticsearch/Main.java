@@ -51,8 +51,10 @@ public class Main {
 
 		//Ajouter une fonctionnalité permettant de filtrer la recherche d'un livre sur un auteur
 		System.out.println("Le livre de l'auteur H. Rider Haggard est : "
-				+ api.searchInAuthorOfBook("H. Rider Haggard"));
-
+				+ api.searchInAuthorOfBook("H. Rider", " Haggard"));
+		// 5. Ajouter une fonctionnalité permettant de filtrer la recherche d'un livre sur un genre particulier
+		System.out.println("Le livre du genre H. Rider Haggard est : "
+				+ api.searchInGenreOfBook("H. Rider", " Haggard"));
 		System.exit(0);
 	}
 }

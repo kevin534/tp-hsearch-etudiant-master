@@ -45,11 +45,15 @@
 			<artifactId>hibernate-search-mapper-orm-coordination-outbox-polling</artifactId>
 			<version>6.1.1.Final</version>
 		</dependency>
-<!-- 		<dependency>
+
+		<!-- dépendance nécessaire à la connexion à OpenSearch -->
+ 		<!--<dependency>
 			<groupId>org.hibernate.search</groupId>
 			<artifactId>hibernate-search-backend-elasticsearch</artifactId>
 			<version>6.1.1.Final</version>
-		</dependency> -->
+		</dependency>-->
+        <!--   fin dependence openSearch  -->
+
 		<dependency>
 			<groupId>org.hibernate.search</groupId>
 			<artifactId>hibernate-search-backend-lucene</artifactId>

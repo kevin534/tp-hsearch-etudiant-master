@@ -11,8 +11,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
-import fr.univtln.dapm.bda.hsearch_elasticsearch.domain.Author;
-import fr.univtln.dapm.bda.hsearch_elasticsearch.domain.Genre;
 import org.hibernate.search.mapper.orm.Search;
 import org.hibernate.search.mapper.orm.session.SearchSession;
 
@@ -56,16 +54,6 @@ public class IndexSearchApi {
 		book.setTitle(fileName);
 		book.setContent(fileContent);
 		entityManager.persist(book); // le livre est automatiquement ajouté à la base de données et indexé!
-
-		/*Author author = new Author();
-		author.setFirstName("Toukam");
-		author.setLastName("kevin");
-		book.getAuthor();
-		author.getListBook().add(book);
-
-		entityManager.persist(author);
-*/
-
 
 		return true;
 	}
@@ -133,11 +121,17 @@ public class IndexSearchApi {
 		return bookResults;
 	}
 	//Ajouter une fonctionnalité permettant de filtrer la recherche d'un livre sur un auteur
-	public List<BookResult> searchInAuthorOfBook(String query) {
+	public List<BookResult> searchInAuthorOfBook(String query1, String query2) {
 		List<BookResult> bookResults = new ArrayList<>();
-
 		List<List<?>> results = fullTextSession.search(Book.class).select(f -> f.composite(f.score(), f.entity()))
-				.where(f -> f.match().field("author.firstname").matching(query)).fetchAllHits();
+				.where( f -> f.nested().objectField( "author" )
+						.nest( f.bool()
+								.must( f.match().field( "author.firstName" )
+										.matching( query1 ) )
+								.must( f.match().field( "author.lastName" )
+										.matching( query2) )
+						) )
+						.fetchAllHits();
 
 		for (List<?> result : results) {
 			float score = (float) result.get(0);
@@ -147,6 +141,26 @@ public class IndexSearchApi {
 
 		return bookResults;
 	}
+	// 5. Ajouter une fonctionnalité permettant de filtrer la recherche d'un livre sur un genre particulier
+	public List<BookResult> searchInGenreOfBook(String query1, String query2) {
+		List<BookResult> bookResults = new ArrayList<>();
+		List<List<?>> results = fullTextSession.search(Book.class).select(f -> f.composite(f.score(), f.entity()))
+				.where( f -> f.nested().objectField( "genre" )
+						.nest( f.bool()
+								.must( f.match().field( "genre.type" )
+										.matching( query1 ) )
+								.must( f.match().field( "genre.description" )
+										.matching( query2) )
+						) )
+				.fetchAllHits();
 
+		for (List<?> result : results) {
+			float score = (float) result.get(0);
+			Book book = (Book) result.get(1);
+			bookResults.add(new BookResult(book, score));
+		}
+
+		return bookResults;
+	}
 
 }
